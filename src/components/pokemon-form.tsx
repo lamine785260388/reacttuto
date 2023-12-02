@@ -2,6 +2,7 @@ import React, { FunctionComponent,useState } from 'react';
 import Pokemon from '../models/pokemon';
 import formatType from '../helpers/format-type';
 import { useHistory } from 'react-router-dom';
+import PokemonService from '../services/pokemon-service';
 
 type Props = {
   pokemon: Pokemon
@@ -71,7 +72,13 @@ const PokemonForm: FunctionComponent<Props> = ({pokemon}) => {
     e.preventDefault();
    const isFormValid=validateForm();
    if (isFormValid){
-    history.push(`/pokemons/${pokemon.id}`)
+    pokemon.name=form.name.value;
+    pokemon.hp=form.hp.value;
+    pokemon.cp=form.cp.value;
+    pokemon.types=form.types.value;
+    PokemonService.updatePokemon(pokemon).then(()=> history.push(`/pokemons/${pokemon.id}`))
+
+    
    }
 
 
@@ -122,7 +129,7 @@ const PokemonForm: FunctionComponent<Props> = ({pokemon}) => {
     return true;
   }
   return (
-    <form onSubmit={(e) => handleSubmit(e)}>
+    <form onSubmit={(e) => handleSubmit(e)} >
       <div className="row">
         <div className="col s12 m8 offset-m2">
           <div className="card hoverable"> 
